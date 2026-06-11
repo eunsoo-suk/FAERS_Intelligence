@@ -107,6 +107,60 @@ def _style_fig(fig, height=None):
 inject_css()
 
 
+# =============== HF Spaces data bootstrap ===============
+# On first launch, pull faers.db (1.58 GB) + chromadb.tar.gz (~50 MB) from
+# the public HF dataset. Idempotent: skipped when files already exist (local dev).
+HF_DATA_REPO = "eunsoosuk/faers-intelligence-data"
+
+@st.cache_resource(show_spinner=False)
+def bootstrap_data():
+    import tarfile
+    from pathlib import Path
+
+    base = Path(os.path.abspath("."))
+    db_path     = base / "data" / "db" / "faers.db"
+    chroma_dir  = base / "data" / "chromadb"
+    chroma_root = base / "data"
+
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    chroma_root.mkdir(parents=True, exist_ok=True)
+
+    need_db     = not db_path.exists()
+    need_chroma = not chroma_dir.exists()
+
+    if not (need_db or need_chroma):
+        return True
+
+    try:
+        from huggingface_hub import hf_hub_download
+    except ImportError:
+        return False  # local dev where huggingface_hub isn't installed
+
+    if need_db:
+        with st.spinner("Downloading FAERS database from Hugging Face (~1.6 GB, first launch only)…"):
+            hf_hub_download(
+                repo_id=HF_DATA_REPO,
+                filename="faers.db",
+                repo_type="dataset",
+                local_dir=str(db_path.parent),
+            )
+
+    if need_chroma:
+        with st.spinner("Downloading ChromaDB vector store (~50 MB)…"):
+            local_tar = hf_hub_download(
+                repo_id=HF_DATA_REPO,
+                filename="chromadb.tar.gz",
+                repo_type="dataset",
+                local_dir=str(chroma_root),
+            )
+            with tarfile.open(local_tar) as tar:
+                tar.extractall(chroma_root)
+
+    return True
+
+bootstrap_data()
+
+
 # =============== Path detection ===============
 def detect_base():
     for c in ["/content/drive/MyDrive/FAERS_Intelligence",

@@ -1,3 +1,15 @@
+---
+title: FAERS Intelligence
+emoji: 💊
+colorFrom: blue
+colorTo: indigo
+sdk: streamlit
+sdk_version: 1.30.0
+app_file: app/app.py
+pinned: false
+license: mit
+---
+
 # FAERS Intelligence Platform
 
 A reproducible pharmacovigilance pipeline that ingests the U.S. FDA Adverse Event
