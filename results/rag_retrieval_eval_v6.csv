@@ -1,0 +1,18 @@
+qtype,query,n_retrieved,filters,drug_precision,severity_precision,pt_in_top5,all_drugs_covered,hits_rosiglitazone,hits_metformin,hits_lisinopril,hits_warfarin,hits_semaglutide,hits_tirzepatide
+drug_risk,What are the safety signals for amlodipine?,5,"{'drugs': ['amlodipine'], 'top_k': 5, 'intent': 'risk_profile', 'include_unclassified': False}",1.0,,,,,,,,,
+drug_risk,What are the safety signals for amoxicillin?,5,"{'drugs': ['amoxicillin'], 'top_k': 5, 'intent': 'risk_profile', 'include_unclassified': False}",1.0,,,,,,,,,
+drug_risk,What are the safety signals for cabotegravir?,5,"{'drugs': ['cabotegravir'], 'top_k': 5, 'intent': 'risk_profile', 'include_unclassified': False}",1.0,,,,,,,,,
+drug_risk,What are the safety signals for ciprofloxacin?,5,"{'drugs': ['ciprofloxacin'], 'top_k': 5, 'intent': 'risk_profile', 'include_unclassified': False}",1.0,,,,,,,,,
+drug_risk,What are the safety signals for clozapine?,5,"{'drugs': ['clozapine'], 'top_k': 5, 'intent': 'risk_profile', 'include_unclassified': False}",1.0,,,,,,,,,
+drug_fatal,What are the fatal adverse events reported for amlodipine?,5,"{'drugs': ['amlodipine'], 'severity': 'FATAL', 'top_k': 5, 'intent': 'severity_focus', 'include_unclassified': False}",1.0,1.0,,,,,,,,
+drug_fatal,What are the fatal adverse events reported for amoxicillin?,5,"{'drugs': ['amoxicillin'], 'severity': 'FATAL', 'top_k': 5, 'intent': 'severity_focus', 'include_unclassified': False}",1.0,1.0,,,,,,,,
+drug_fatal,What are the fatal adverse events reported for ciprofloxacin?,5,"{'drugs': ['ciprofloxacin'], 'severity': 'FATAL', 'top_k': 5, 'intent': 'severity_focus', 'include_unclassified': False}",1.0,1.0,,,,,,,,
+drug_fatal,What are the fatal adverse events reported for clozapine?,5,"{'drugs': ['clozapine'], 'severity': 'FATAL', 'top_k': 5, 'intent': 'severity_focus', 'include_unclassified': False}",1.0,1.0,,,,,,,,
+drug_pt,Is AMYLOID RELATED IMAGING ABNORMALITY-OEDEMA/EFFUSION a known signal for lecanemab?,5,"{'drugs': ['lecanemab'], 'severity': None, 'group': None, 'top_k': 5, 'intent': 'signal_list', 'include_unclassified': False}",1.0,,1.0,,,,,,,
+drug_pt,Is APPENDICOLITH a known signal for warfarin?,5,"{'drugs': ['warfarin'], 'top_k': 5, 'intent': 'signal_list', 'include_unclassified': False}",1.0,,1.0,,,,,,,
+drug_pt,Is GRIP STRENGTH a known signal for lisinopril?,5,"{'drugs': ['lisinopril'], 'severity': None, 'group': None, 'top_k': 5, 'intent': 'signal_list', 'include_unclassified': False}",1.0,,1.0,,,,,,,
+drug_pt,Is NEUROPSYCHIATRIC SYNDROME a known signal for ciprofloxacin?,5,"{'drugs': ['ciprofloxacin'], 'top_k': 5, 'intent': 'signal_list', 'include_unclassified': False}",1.0,,1.0,,,,,,,
+drug_pt,Is PRODUCT USE IN UNAPPROVED THERAPEUTIC ENVIRONMENT a known signal for cabotegravir?,5,"{'drugs': ['cabotegravir'], 'top_k': 5, 'intent': 'signal_list', 'include_unclassified': False}",1.0,,1.0,,,,,,,
+comparison,Compare rosiglitazone and metformin safety signals,8,"{'drugs': ['rosiglitazone', 'metformin'], 'top_k': 10, 'intent': 'comparison', 'include_unclassified': False}",1.0,,,1.0,3.0,5.0,,,,
+comparison,Compare warfarin and lisinopril safety signals,10,"{'drugs': ['warfarin', 'lisinopril'], 'top_k': 10, 'intent': 'comparison', 'include_unclassified': False}",1.0,,,1.0,,,5.0,5.0,,
+comparison,Compare semaglutide and tirzepatide safety signals,10,"{'drugs': ['semaglutide', 'tirzepatide'], 'top_k': 10, 'intent': 'comparison', 'include_unclassified': False}",1.0,,,1.0,,,,,5.0,5.0

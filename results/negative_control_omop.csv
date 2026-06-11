@@ -1,0 +1,30 @@
+drug,pt,found,a,eb05,prr,is_signal,strength
+metformin,TINNITUS,True,33.0,1.4952,2.0569,False,None
+metformin,CATARACT,True,60.0,1.6007,2.0203,False,None
+metformin,CONJUNCTIVITIS,True,9.0,0.4324,0.8115,False,None
+metformin,ONYCHOMYCOSIS,True,17.0,3.9355,6.4914,False,None
+metformin,NASAL CONGESTION,True,57.0,1.4271,1.8099,False,None
+metformin,NEPHROLITHIASIS,True,61.0,2.1366,2.7043,False,None
+lisinopril,TINNITUS,True,6.0,0.7511,1.6779,False,None
+lisinopril,CATARACT,True,41.0,4.3734,5.8604,True,Moderate
+lisinopril,NASAL CONGESTION,True,9.0,0.6668,1.2582,False,None
+lisinopril,NEPHROLITHIASIS,True,3.0,0.201,0.6438,False,None
+omeprazole,TINNITUS,True,187.0,13.8171,16.7804,True,Strong
+omeprazole,CATARACT,True,58.0,2.1198,2.6924,False,None
+omeprazole,CONJUNCTIVITIS,True,33.0,2.8699,3.9923,False,None
+omeprazole,ONYCHOMYCOSIS,True,8.0,2.0759,4.2658,False,None
+omeprazole,TONSILLITIS,True,3.0,0.5302,1.7492,False,None
+omeprazole,NASAL CONGESTION,True,42.0,1.3932,1.8395,False,None
+omeprazole,NEPHROLITHIASIS,True,73.0,3.5812,4.4696,False,None
+omeprazole,PLANTAR FASCIITIS,True,10.0,4.6646,9.3261,True,Moderate
+amlodipine,TINNITUS,True,46.0,3.0317,4.0009,False,None
+amlodipine,CATARACT,True,60.0,2.2267,2.8181,False,None
+amlodipine,NASAL CONGESTION,True,19.0,0.5603,0.8504,False,None
+amlodipine,NEPHROLITHIASIS,True,6.0,0.1797,0.3932,False,None
+amlodipine,PLANTAR FASCIITIS,True,5.0,1.874,4.8528,False,None
+amoxicillin,TINNITUS,True,22.0,1.312,1.9451,False,None
+amoxicillin,CATARACT,True,15.0,0.4516,0.7253,False,None
+amoxicillin,CONJUNCTIVITIS,True,19.0,1.5391,2.3659,False,None
+amoxicillin,TONSILLITIS,True,7.0,1.7925,3.8746,False,None
+amoxicillin,NASAL CONGESTION,True,40.0,1.3511,1.7963,False,None
+amoxicillin,NEPHROLITHIASIS,True,21.0,0.8878,1.3229,False,None

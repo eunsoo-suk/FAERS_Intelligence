@@ -1,0 +1,144 @@
+[
+  {
+    "query": "What are the strongest fatal signals for semaglutide?",
+    "filters": {
+      "drugs": [
+        "semaglutide"
+      ],
+      "severity": "FATAL",
+      "top_k": 5,
+      "intent": "severity_focus",
+      "include_unclassified": false
+    },
+    "answer": "The strongest fatal signals for semaglutide are medullary thyroid cancer and adenocarcinoma pancreas, both showing very high EBGM values despite zero or low observed death rates in FAERS [sig_3227][sig_3164].\n\n**Key fatal signals for semaglutide:**\n\u2022 **Medullary thyroid cancer** - EBGM 35.2, n=11, death rate 0% (small-n, unstable estimate) [sig_3227]\n\u2022 **Adenocarcinoma pancreas** - EBGM 20.4, n=12, death rate 25% (small-n, unstable estimate) [sig_3164]  \n\u2022 **Anaplastic thyroid cancer** - EBGM 15.2, n=3, death rate 0% (small-n, unstable estimate) [sig_3166]\n\u2022 **Necrotizing pancreatitis** - EBGM 11.9, n=22, death rate 32% [sig_3239]\n\u2022 **Pancreatic carcinoma** - EBGM 8.5, n=75, death rate 21% [sig_3233]\n\n**Note:** The highest EBGM signals (thyroid cancers) show 0% empirical death rates in FAERS despite their inherently fatal clinical nature, while necrotizing pancreatitis shows both strong signaling and substantial observed mortality. This suggests potential differences in reporting patterns or disease progression timing relative to FAERS reporting windows.\n\n*FAERS limitations: voluntary reporting, no population denominators, no established causality.*",
+    "citations": [
+      "sig_3227",
+      "sig_3164",
+      "sig_3227",
+      "sig_3164",
+      "sig_3166",
+      "sig_3239",
+      "sig_3233"
+    ],
+    "retrieved_n": 5,
+    "retrieval_fallback": false
+  },
+  {
+    "query": "Compare cardiac risk: rosiglitazone vs metformin",
+    "filters": {
+      "drugs": [
+        "rosiglitazone",
+        "metformin"
+      ],
+      "severity": null,
+      "group": null,
+      "top_k": 10,
+      "intent": "comparison",
+      "include_unclassified": false
+    },
+    "answer": "**Direct Answer**\nRosiglitazone has very limited cardiac signal representation in the current FAERS data \u2014 only 2 signals retrieved, both neurological rather than cardiac [interp_rosiglitazone]. Metformin shows multiple cardiac signals including severe coronary arteriosclerosis (EBGM=25.9, n=99, death rate 31%) and various structural/functional cardiac events with generally lower mortality [sig_2008, sig_2285, sig_2241, sig_2188, sig_2047].\n\n**Key Signals by Drug**\n\n**Rosiglitazone (cardiac-specific):**\n\u2022 No cardiac signals detected in current dataset\n\u2022 Only neurological signals present: diabetic neuropathy and lumbosacral radiculoplexus neuropathy [sig_3161, sig_3162]\n\n**Metformin (cardiac-specific):**\n\u2022 **Arteriosclerosis coronary artery**: EBGM=25.9, n=99, death rate 31%, serious rate 81% [sig_2008]\n\u2022 **Sinus bradycardia**: EBGM=6.9, n=33, death rate 0%, serious rate 74% [sig_2285]\n\u2022 **Pericardial haemorrhage**: EBGM=10.8, n=6, death rate 0%, serious rate 100% (small-n, unstable estimate) [sig_2241]\n\u2022 **Left ventricular hypertrophy**: EBGM=7.7, n=11, death rate 0%, serious rate 100% (small-n, unstable estimate) [sig_2188]\n\u2022 **Cardiac murmur**: EBGM=10.4, n=41, death rate 0%, serious rate 33% [sig_2047]\n\n**Caveat**\nFAERS data has inherent limitations including reporting bias, lack of exposure denominators, and inability to establish causality.",
+    "citations": [
+      "interp_rosiglitazone",
+      "sig_2008",
+      "sig_2285",
+      "sig_2241",
+      "sig_2188",
+      "sig_2047"
+    ],
+    "retrieved_n": 8,
+    "retrieval_fallback": false
+  },
+  {
+    "query": "Which GSK portfolio drugs have the most severe signals?",
+    "filters": {
+      "drugs": [],
+      "severity": "SEVERE",
+      "group": "gsk",
+      "top_k": 10,
+      "intent": "severity_focus",
+      "include_unclassified": false
+    },
+    "answer": "Based on the retrieved FAERS data, **mepolizumab** (GSK's anti-IL-5 monoclonal antibody for severe eosinophilic asthma) dominates the severe signal landscape among GSK portfolio drugs. All 10 signals in the context are mepolizumab-associated, with severity ratings of \"SEVERE\" and varying signal strengths from moderate to strong.\n\n**Key severe signals for mepolizumab:**\n\n\u2022 **ASTHMATIC CRISIS** - EBGM 41.0, n=67, death rate 1%, serious rate 54% [sig_1725]\n\u2022 **CHRONIC OBSTRUCTIVE PULMONARY DISEASE** - EBGM 17.3, n=318, death rate 2%, serious rate 88% [sig_1759]\n\u2022 **BLOOD LACTIC ACID INCREASED** - EBGM 13.9, n=30, death rate 0%, serious rate 100% [sig_1736]\n\u2022 **CHOKING** - EBGM 11.4, n=106, death rate 0%, serious rate 23% [sig_1758]\n\u2022 **BLOOD CALCIUM INCREASED** - EBGM 9.3, n=28, death rate 0%, serious rate 93% [sig_1733]\n\u2022 **TASTE DISORDER** - EBGM 9.0, n=173, death rate 92%, serious rate 97% (likely patient-population effect \u2014 PT not typically fatal, deaths likely from co-occurring SAEs in the same report) [sig_1951]\n\u2022 **TACHYARRHYTHMIA** - EBGM 8.3, n=6, death rate 0%, serious rate 100% (small-n, unstable estimate) [sig_1950]\n\u2022 **DRUG INTOLERANCE** - EBGM 4.5, n=229, death rate 74%, serious rate 98% [sig_1772]\n\u2022 **SLEEP DISORDER** - EBGM 4.8, n=193, death rate 70%, serious rate 90% [sig_1933]\n\u2022 **BLOOD TEST ABNORMAL** - EBGM 5.3, n=44, death rate 0%, serious rate 89% [sig_1737]\n\n**Caveat:** FAERS data reflects reporting patterns and cannot establish causality; denominator data unavailable.",
+    "citations": [
+      "sig_1725",
+      "sig_1759",
+      "sig_1736",
+      "sig_1758",
+      "sig_1733",
+      "sig_1951",
+      "sig_1950",
+      "sig_1772",
+      "sig_1933",
+      "sig_1737"
+    ],
+    "retrieved_n": 10,
+    "retrieval_fallback": false
+  },
+  {
+    "query": "Does ciprofloxacin still show tendon-related signals in 2024?",
+    "filters": {
+      "drugs": [
+        "ciprofloxacin"
+      ],
+      "top_k": 5,
+      "intent": "signal_list",
+      "include_unclassified": false
+    },
+    "answer": "Yes, ciprofloxacin continues to show robust tendon-related signals in 2024 FAERS data. Five distinct tendon adverse events demonstrate strong disproportionality signals with EBGM values ranging from 37.2 to 116.4 [sig_1032, sig_1033, sig_1034, sig_1035, sig_1036]. The empirical outcome severity aligns with clinical PT risk expectations, showing moderate severity for pain/discomfort symptoms and severe classification for structural damage like rupture and injury.\n\n**Key tendon signals:**\n\u2022 **TENDON PAIN**: EBGM=116.4, n=129 cases, 0% death rate, moderate severity [sig_1035]\n\u2022 **TENDON DISCOMFORT**: EBGM=77.6, n=16 cases, 6% death rate, moderate severity [sig_1032]  \n\u2022 **TENDON DISORDER**: EBGM=70.3, n=73 cases, 1% death rate, moderate severity [sig_1033]\n\u2022 **TENDON RUPTURE**: EBGM=37.4, n=61 cases, 0% death rate, severe severity [sig_1036]\n\u2022 **TENDON INJURY**: EBGM=37.2, n=23 cases, 0% death rate, severe severity [sig_1034]\n\nFAERS data reflects reporting patterns and cannot establish causality or provide population-level incidence rates.",
+    "citations": [
+      "sig_1035",
+      "sig_1032",
+      "sig_1033",
+      "sig_1036",
+      "sig_1034"
+    ],
+    "retrieved_n": 5,
+    "retrieval_fallback": false
+  },
+  {
+    "query": "Tell me about ARIA-E for lecanemab",
+    "filters": {
+      "drugs": [
+        "lecanemab"
+      ],
+      "severity": null,
+      "group": null,
+      "top_k": 5,
+      "intent": "mechanism",
+      "include_unclassified": false
+    },
+    "answer": "ARIA-E (Amyloid-Related Imaging Abnormality-Edema) represents the most prominent safety signal for lecanemab, with extremely elevated reporting rates and concerning mortality outcomes. The empirical FAERS data shows ARIA-E as the strongest signal with EBGM=589.2 and a 4% death rate among 137 cases [sig_1481], while related brain edema events show 6% mortality in 17 cases [sig_1482]. These findings align with the known mechanism-based risks of anti-amyloid antibodies but appear more pronounced than typical class effects [interp_lecanemab].\n\n**Key ARIA-E signals:**\n\u2022 **AMYLOID RELATED IMAGING ABNORMALITY-OEDEMA/EFFUSION**: EBGM=589.2, 4% death rate, n=137 [sig_1481]\n\u2022 **BRAIN OEDEMA**: EBGM=24.4, 6% death rate, n=17 [sig_1482]  \n\u2022 **CEREBRAL MASS EFFECT**: EBGM=23.6, 33% death rate, n=3 (small-n, unstable estimate) [sig_1484]\n\u2022 **MAGNETIC RESONANCE IMAGING ABNORMAL**: EBGM=20.1, 0% death rate, n=5 (small-n, unstable estimate) [sig_1493]\n\n**Severity assessment:** The empirical outcome severity shows 4-6% mortality for the larger ARIA-E cohorts, while the clinical PT risk is inherently SEVERE for brain edema events - these align consistently, indicating genuine severe outcomes rather than reporting artifacts [sig_1481, sig_1482]. The 33% mortality for cerebral mass effect represents a small-n unstable estimate and should be interpreted cautiously [sig_1484].\n\n*FAERS data reflects reporting patterns and lacks denominators for incidence calculation; causality cannot be established from these associations alone.*",
+    "citations": [
+      "sig_1481",
+      "sig_1482",
+      "interp_lecanemab",
+      "sig_1481",
+      "sig_1482",
+      "sig_1484",
+      "sig_1493",
+      "sig_1484"
+    ],
+    "retrieved_n": 5,
+    "retrieval_fallback": false
+  },
+  {
+    "query": "Any unexpected dermatology signals in the negative-control group?",
+    "filters": {
+      "drugs": [],
+      "group": "negative_control",
+      "top_k": 5,
+      "intent": "signal_list",
+      "include_unclassified": false
+    },
+    "answer": "Yes, several unexpected dermatology signals emerge in the negative-control group, particularly severe skin conditions with concerning mortality patterns. Both amlodipine and amoxicillin show strong signals for exfoliative dermatitis, while amoxicillin demonstrates additional rare dermatologic reactions.\n\n**Key dermatology signals:**\n\n\u2022 **Amlodipine - Dermatitis exfoliative generalised**: EBGM=13.0, n=35 cases, 19% death rate [sig_111]\n\n\u2022 **Amoxicillin - Dermatitis exfoliative generalised**: EBGM=15.0, n=28 cases, 24% death rate [sig_459]\n\n\u2022 **Amoxicillin - Acute febrile neutrophilic dermatosis**: EBGM=17.1, n=13 cases, 0% death rate [sig_397]\n\n\u2022 **Amoxicillin - Staphylococcal scalded skin syndrome**: EBGM=25.1, n=3 cases, 67% death rate (small-n, unstable estimate) [sig_645]\n\n\u2022 **Amoxicillin - Dermatitis allergic**: EBGM=5.8, n=27 cases, 0% death rate [sig_458]\n\nThe exfoliative dermatitis signals are particularly notable given both drugs' widespread use and the empirical mortality rates (19-24%), which align with the severe clinical PT risk for this life-threatening condition. Amoxicillin shows a broader spectrum of dermatologic reactions, including rare inflammatory conditions.\n\n*FAERS data subject to reporting bias, lacks exposure denominators, and cannot establish causality.*",
+    "citations": [
+      "sig_111",
+      "sig_459",
+      "sig_397",
+      "sig_645",
+      "sig_458"
+    ],
+    "retrieved_n": 5,
+    "retrieval_fallback": false
+  }
+]

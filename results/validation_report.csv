@@ -1,0 +1,19 @@
+drug,event,detected,eb05,prr,strength
+ciprofloxacin,TENDON RUPTURE,True,30.1423,43.9839,Strong
+ciprofloxacin,TENDON DISORDER,True,57.306,95.5632,Strong
+ciprofloxacin,TENDONITIS,True,49.5628,70.0948,Strong
+ciprofloxacin,ARTHRALGIA,False,3.0062,3.3453,None
+isotretinoin,DEPRESSION,True,6.1316,6.9537,Moderate
+isotretinoin,CHEILITIS,True,34.3796,55.6257,Strong
+isotretinoin,DRY SKIN,True,4.6992,5.3769,Moderate
+clozapine,AGRANULOCYTOSIS,True,5.8942,7.5876,Moderate
+clozapine,NEUTROPENIA,True,24.2944,31.9287,Strong
+clozapine,MYOCARDITIS,True,14.698,19.7508,Strong
+warfarin,HAEMORRHAGE,True,7.7562,9.8904,Moderate
+warfarin,INTERNATIONAL NORMALISED RATIO INCREASED,True,210.734,391.0085,Strong
+warfarin,GASTROINTESTINAL HAEMORRHAGE,True,19.6917,26.0142,Strong
+rofecoxib,MYOCARDIAL INFARCTION,True,31.95,71.4572,Strong
+rofecoxib,CEREBROVASCULAR ACCIDENT,False,,,missing
+rosiglitazone,CARDIAC FAILURE CONGESTIVE,False,,,missing
+rosiglitazone,MYOCARDIAL INFARCTION,False,,,missing
+rosiglitazone,OEDEMA PERIPHERAL,False,,,missing

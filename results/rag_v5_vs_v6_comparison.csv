@@ -1,0 +1,15 @@
+query,v5_precision,v6_precision
+What are the safety signals for amlodipine?,0,1.0
+What are the safety signals for amoxicillin?,0,1.0
+What are the safety signals for cabotegravir?,0,1.0
+What are the safety signals for ciprofloxacin?,0,1.0
+What are the safety signals for clozapine?,0,1.0
+What are the fatal adverse events reported for amlodipine?,0,1.0
+What are the fatal adverse events reported for amoxicillin?,0,1.0
+What are the fatal adverse events reported for ciprofloxacin,0,1.0
+What are the fatal adverse events reported for clozapine?,0,1.0
+Is AMYLOID RELATED IMAGING ABNORMALITY-OEDEMA/EFFUSION a kno,0,1.0
+Is APPENDICOLITH a known signal for warfarin?,0,1.0
+Is GRIP STRENGTH a known signal for lisinopril?,0,1.0
+Is NEUROPSYCHIATRIC SYNDROME a known signal for ciprofloxaci,0,1.0
+Is PRODUCT USE IN UNAPPROVED THERAPEUTIC ENVIRONMENT a known,0,1.0

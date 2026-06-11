@@ -1,0 +1,38 @@
+{
+  "n_evaluated_pairs": 2092,
+  "cohen_kappa": 0.11684144580763345,
+  "fatal_precision": 0.44871794871794873,
+  "fatal_recall": 0.11254019292604502,
+  "confusion_matrix": [
+    [
+      283,
+      319,
+      91,
+      1
+    ],
+    [
+      121,
+      330,
+      231,
+      15
+    ],
+    [
+      52,
+      179,
+      132,
+      27
+    ],
+    [
+      71,
+      145,
+      60,
+      35
+    ]
+  ],
+  "severity_order": [
+    "MILD",
+    "MODERATE",
+    "SEVERE",
+    "FATAL"
+  ]
+}
