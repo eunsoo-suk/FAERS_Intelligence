@@ -1,127 +1,223 @@
----
-title: FAERS Intelligence
-emoji: 💊
-colorFrom: blue
-colorTo: indigo
-sdk: streamlit
-sdk_version: 1.41.0
-python_version: "3.11"
-app_file: app/app.py
-pinned: false
-license: mit
----
-
 # FAERS Intelligence Platform
 
-A reproducible pharmacovigilance pipeline that ingests the U.S. FDA Adverse Event
-Reporting System (FAERS), detects drug-event signals with empirical-Bayes shrinkage,
-calibrates severity using both real outcomes and an LLM, and exposes everything through
-a Streamlit dashboard with retrieval-augmented Q&A.
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://faers-intelligence.streamlit.app)
+[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Pipeline
+**🔗 Live demo:** **[faers-intelligence.streamlit.app](https://faers-intelligence.streamlit.app)**
 
-1. **Phase 1 — ETL.** Quarterly FAERS ASCII files are ingested into a single SQLite
-   database (`faers.db`). Reports are deduplicated conservatively (latest caseversion +
-   demographic fingerprint when age is known), drug names normalized to a single
-   RxNorm-style ingredient, and modern FAERS kept separate from pre-2012 legacy AERS.
+> First load takes 2–5 minutes — the app downloads a 1.6 GB SQLite database
+> from Hugging Face on cold start. Subsequent interactions are instant.
 
-2. **Phase 2 — Signal detection.** For each (drug, event) pair we build a 2x2 table and
-   compute PRR/ROR with 95% CI (Haldane-Anscombe +0.5 for zero cells), Yates chi-square
-   with Benjamini-Hochberg FDR, and empirical-Bayes Gamma-Poisson shrinkage (EBGM/EB05) —
-   DuMouchel's single-component approximation of the FDA's MGPS algorithm.
+![Dashboard overview](figures/dashboard_overview.png)
 
-3. **Phase 3 — Severity calibration.** Two independent severity sources: ground-truth at
-   the PT level (computed across all drugs to remove patient-population bias) and an LLM
-   zero-shot classification. Cross-validated with Cohen's kappa, quadratic-weighted
-   kappa, and adjacent agreement, then merged conservatively (max-rank). Validated
-   against a clinical gold standard on established positive controls.
+---
 
-4. **Phase 4 — RAG.** All signals plus per-drug summaries are embedded in ChromaDB.
-   Natural-language queries are parsed into structured metadata filters before vector
-   similarity is applied. Per-drug split retrieval guarantees coverage even for sparse
-   drugs. UNCLASSIFIED signals are hidden by default.
+## What this is
 
-5. **Phase 5 — Dashboard.** A Streamlit app that surfaces every output from phases 1-4:
-   signal explorer, drug profiles, drug comparison, calibration metrics, validation
-   against positive/negative controls, and natural-language Q&A.
+An end-to-end pharmacovigilance platform that turns raw FDA adverse-event
+reports into **ranked, severity-calibrated, citable drug-safety signals**.
+Built on **1.4 million real FAERS reports** spanning two decades, validated
+against the OMOP negative-control standard and a clinical gold standard.
+
+Post-marketing drug safety today relies on hand-curated signal review by
+regulators — slow, opinion-heavy, and biased by signal volume. This project
+asks: can a reproducible, statistically grounded, LLM-augmented system
+produce signals a clinical reviewer can actually trust?
+
+---
+
+## The pipeline
+
+Five phases, each phase's output feeding the next.
+
+### Phase 1 — ETL
+- Ingests quarterly FAERS ASCII files (2004 Q3 → 2024 Q3) into one unified
+  SQLite database.
+- Conservative dedup: latest `caseversion` + demographic fingerprint when
+  age is known.
+- Drug-name normalization to a single RxNorm-style ingredient.
+- Modern FAERS kept separate from pre-2012 legacy AERS so the two coding
+  eras never silently merge.
+- **Output:** `faers.db` (1.58 GB SQLite, **1,409,287 reports**).
+
+### Phase 2 — Signal detection
+For every (drug, event) pair, builds a 2×2 contingency table and asks
+whether the event shows up disproportionately.
+- **PRR / ROR** with 95% CI (Haldane–Anscombe +0.5 correction for zero cells).
+- **Yates χ²** with Benjamini–Hochberg FDR to control false positives
+  across thousands of tests.
+- **Empirical-Bayes Gamma-Poisson shrinkage (EBGM / EB05)** — DuMouchel's
+  single-component approximation of the FDA's MGPS, pulling unstable
+  small-count ratios toward the baseline.
+- **Output:** **14,750 detected signals** across 18 target drugs.
+
+### Phase 3 — Dual-severity calibration
+Severity is derived **two independent ways** that capture different
+information — and their disagreement is itself the finding.
+- **Empirical severity (FAERS-GT)** — computed at the **PT level** (not
+  drug-PT) from real outcome codes, which removes the bias of drugs used in
+  already-sick populations.
+- **Clinical PT severity (LLM)** — zero-shot classification of the MedDRA
+  term itself by Claude Sonnet, grounded by anchor examples.
+- Cross-validated with Cohen's κ, quadratic-weighted κ, ±1-tier agreement,
+  and binary FATAL∪SEVERE accuracy.
+- **On a clinical gold standard, LLM severity outperforms the FAERS-outcome
+  GT (+38 points).** The LLM recovers *treatable emergencies* — agranulocytosis,
+  major haemorrhage — that the outcome-based GT under-rates because the
+  patients survive.
+
+### Phase 4 — RAG-grounded Q&A
+- All signals plus per-drug summaries embedded in ChromaDB with rich
+  metadata (drug, event, severity, EBGM, n_cases, death_rate).
+- **Per-drug split retrieval** — divides top-k evenly across the drugs in
+  a multi-drug query so sparse drugs aren't drowned out by louder ones.
+- Natural-language queries parsed into structured metadata filters
+  **before** vector similarity.
+- Answers forced to flag small-n (n<10) and patient-population effects.
+- **Drug-precision: 0% (naive v5) → 100% (v6)** on a 17-query evaluation set.
+
+### Phase 5 — Streamlit dashboard
+Live exposure of every output: signal explorer with interactive volcano
+plot, drug-level safety profiles with LLM synthesis, drug-vs-drug
+comparison, dual-severity analysis, validation against positive and
+negative controls, and natural-language Q&A.
+
+---
+
+## Results
+
+### Signal explorer
+
+![Signal Explorer with volcano plot](figures/dashboard_signal_explorer.png)
+
+5,589 statistically significant (drug, event) pairs after filtering at
+EB05 ≥ 2.0 and n ≥ 3. Color encodes empirical severity — the cluster of
+red and orange dots at the high-EBGM end is exactly where a regulatory
+reviewer should look first.
+
+### Drug-level synthesis
+
+![Drug Profile — amlodipine](figures/dashboard_drug_profile.png)
+
+LLM-generated safety assessments grounded in the detected signals, with
+structured sections (overall profile, most concerning signals, expected
+vs. novel, class comparison, risk–benefit, recommendations) and links to
+representative cases.
+
+### Validation against OMOP negative controls
+
+The hard pharmacovigilance standard: pre-validated unrelated drug-event
+pairs that *shouldn't* be flagged.
+
+![Validation page — 93% sensitivity, 89.7% specificity](figures/dashboard_validation.png)
+
+| Metric | Result | What it measures |
+|---|---|---|
+| **Sensitivity** | **93%** | Established positive-control signals correctly detected |
+| **Specificity (OMOP)** | **89.7%** | Validated unrelated pairs correctly rejected (FP rate 10.3%) |
+| **LLM clinical accuracy** | **77%** | LLM severity classification vs clinical gold standard |
+| **+38 pts** | LLM vs FAERS-GT | LLM recovers treatable emergencies the outcome-based GT misses |
+
+The residual false positives (omeprazole/elderly, etc.) reflect age and
+comorbidity confounding — an *intrinsic* limit of disproportionality
+methods, not a code defect.
+
+---
+
+## Tech stack
+
+- **Python 3.11** — pandas, numpy, scipy, scikit-learn
+- **SQLite** for the unified relational store (1.58 GB)
+- **ChromaDB** + sentence-transformers for vector retrieval
+- **Anthropic Claude Sonnet 4** for severity classification and RAG synthesis
+- **Streamlit** + Plotly for the interactive dashboard
+- **Hugging Face Datasets** hosts the 1.58 GB database, downloaded on first
+  cold start via `huggingface_hub`
+- **Streamlit Community Cloud** hosts the live app
+
+---
 
 ## Repository layout
 
 ```
-FAERS_Intelligence/
-├── notebooks/
-│   ├── phase1_etl.ipynb
-│   ├── phase2_signal_detection.ipynb
-│   ├── phase3_severity_calibration.ipynb
-│   ├── phase4_rag_qa.ipynb
-│   └── phase5_dashboard.ipynb
-├── app/
-│   ├── app.py
-│   ├── requirements.txt
-│   └── .streamlit/
-│       ├── config.toml
-│       └── secrets.toml.example
-└── data/
-    ├── db/faers.db              # produced by Phase 1
-    ├── chromadb/                # produced by Phase 4
-    └── results/                 # produced by Phases 2-4
-        ├── meta_v6.json
-        ├── severity_calibrated_v6.csv
-        ├── gold_standard_validation_v6.csv
-        ├── case_summaries_v6.csv
-        ├── drug_interpretations_v6.json
-        ├── rag_qa_v6.json
-        ├── rag_v5_vs_v6_comparison.csv
-        └── rag_retrieval_eval_v6.csv
+notebooks/
+  phase1_etl.ipynb                # quarterly FAERS → faers.db
+  phase2_signal_detection.ipynb   # PRR/ROR/χ²/EBGM
+  phase3_severity_calibration.ipynb  # dual-severity (FAERS-GT × LLM)
+  phase4_rag_qa.ipynb             # ChromaDB + per-drug split retrieval
+  phase5_dashboard.ipynb          # Streamlit prototype
+app/
+  app.py                          # production Streamlit app
+  requirements.txt
+results/                          # per-drug summaries, signal lists, LLM outputs (~5 MB)
+figures/                          # dashboard + notebook artifacts
 ```
 
-## Running the pipeline (Colab)
+Heavy artifacts (`faers.db`, `chromadb/`) are not tracked in Git — they
+are regeneratable from the notebooks, or downloaded from
+[the Hugging Face dataset](https://huggingface.co/datasets/eunsoosuk/faers-intelligence-data)
+on first launch.
 
-Phases 1-4 are designed to run on Google Colab with the project on Google Drive at
-`/content/drive/MyDrive/FAERS_Intelligence`. Set `ANTHROPIC_API_KEY` as a Colab Secret
-before running Phase 3 or Phase 4 — never paste keys into the notebook. Run phases in
-order; each phase's output is the next phase's input.
+---
 
-Approximate LLM cost: ~1,500 calls for Phase 3 severity classification, ~90 calls for
-case summaries (3 per drug), ~30 calls for drug interpretations (1 per drug), plus
-on-demand calls from Phase 4 / Phase 5 Q&A.
-
-## Running the dashboard locally
+## Running locally
 
 ```bash
-cd app
-pip install -r requirements.txt
-streamlit run app.py
+git clone https://github.com/eunsoo-suk/FAERS_Intelligence.git
+cd FAERS_Intelligence
+
+pip install -r app/requirements.txt
+streamlit run app/app.py
 ```
 
-The dashboard auto-detects the project directory in this order:
+On first run, `app.py` calls `bootstrap_data()` which downloads
+`faers.db` (1.58 GB) and `chromadb.tar.gz` (50 MB) from the public
+Hugging Face dataset into `data/`. Subsequent runs are instant.
 
-1. `FAERS_BASE` environment variable
-2. `/content/drive/MyDrive/FAERS_Intelligence` (Colab default)
-3. `~/FAERS_Intelligence`
-4. The current working directory
+To regenerate everything from scratch, run the notebooks in
+`notebooks/` in order (Phase 1 → Phase 5).
 
-Provide the Anthropic API key via the in-app password field, the environment variable
-`ANTHROPIC_API_KEY`, or `.streamlit/secrets.toml`. The Q&A page requires it; every other
-page works without it.
+---
 
-## Deploying to Streamlit Community Cloud
+## Data provenance
 
-1. Push this repository to GitHub.
-2. At https://share.streamlit.io, connect the repository and set the entry point to
-   `app/app.py`.
-3. Under Settings → Secrets, add `ANTHROPIC_API_KEY = "sk-ant-..."`.
-4. Deploy. The data files committed under `data/` are picked up automatically because
-   the path-detection logic falls back to the current working directory.
+- **FAERS quarterly ASCII files** — public, U.S. FDA
+  ([fis.fda.gov](https://fis.fda.gov/extensions/FPD-QDE-FAERS/FPD-QDE-FAERS.html)).
+- **MedDRA preferred terms** — used as supplied by FDA; no MedDRA license is
+  required to consume FAERS event labels in this read-only manner.
+- **OMOP negative-control pairs** — derived from the OHDSI / EU-ADR reference set.
 
-If `data/` exceeds GitHub's 100 MB-per-file limit, switch to Git LFS or host the data
-externally and fetch on first startup.
+---
 
-## Notes
+## Limitations of FAERS
 
-- The dashboard is read-only — none of its loaders write to the FAERS database.
-- `UNCLASSIFIED` is preserved in the data for transparency but hidden from charts and
-  RAG queries by default. The Drug Profile page shows a Coverage metric that exposes
-  what fraction of signals were classifiable.
-- Negative controls (metformin, lisinopril, etc.) are tracked as an OMOP-style
-  reference set and should have a low signal rate. The Validation page surfaces this.
+- **Voluntary reporting** — under-reporting common; severe outcomes
+  over-represented.
+- **No denominator** — without prescription/exposure counts, true
+  incidence is unknowable.
+- **Reporting bias** — Weber effect (launch spikes), media-driven spikes,
+  country differences.
+- **Association ≠ causation** — a drug appearing in a report does not
+  mean it caused the event.
+- **Confounding by indication** — sicker patients on certain drugs →
+  background mortality inflates empirical severity.
+
+---
+
+## Methods
+
+- DuMouchel WH. *Bayesian data mining in large frequency tables, with an
+  application to the FDA spontaneous reporting system.* The American
+  Statistician, 1999.
+- Bate A, Evans SJW. *Quantitative signal detection using spontaneous ADR
+  reporting.* Pharmacoepidemiology & Drug Safety, 2009.
+- Fusaroli M et al. *The DiAna dictionary…* Drug Safety, 2024.
+- van Puijenbroek EP et al. *A comparison of measures of disproportionality…*
+  Pharmacoepidemiology & Drug Safety, 2002.
+
+---
+
+## License
+
+MIT — see [`LICENSE`](LICENSE).
