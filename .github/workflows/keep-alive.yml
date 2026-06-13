@@ -1,0 +1,12 @@
+name: Keep Streamlit Alive
+on:
+  schedule:
+    - cron: '0 */10 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping app
+        run: curl -s -o /dev/null -w "%{http_code}" https://faers-intelligence.streamlit.app/
